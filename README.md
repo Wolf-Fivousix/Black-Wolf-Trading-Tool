@@ -1,0 +1,2 @@
+# Black-Wolf-Trading-Tool
+To provide players with an easy and visual way for trading items in game while granting a non intrusive software, this Windows tool interacts with Guild Wars 2 game market and retrieve the current best deals. Fully written in C++ using Windows and Guild Wars 2 API’s no magic or asuran technology was used in this attempt to bankrupt Evon Gnashblade and the Black Lion Trading Company.
