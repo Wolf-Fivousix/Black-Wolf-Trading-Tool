@@ -1,0 +1,22 @@
+#include "Resources.h"
+#include <windows.h>    // For the About Window
+
+IDI_ICON    ICON "Black_Wolf_Trading_Tool.ico"// "Black_Wolf_Trading_Tool.ico"
+
+// About Window
+IDD_ABOUT_WINDOW DIALOG DISCARDABLE  50, 0, 256, 130
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "About this software"
+FONT 11, "Times New Roman"
+BEGIN
+    GROUPBOX        "Black Wolf Trading Tool          Version: 1.01",IDC_STATIC,7,7,240,120
+    CTEXT            "Developed By: Diego ''Wolf Fivousix'' \n"\
+                        "Art by: Mayra de Barros Gallo (Yuki)\n\n"\
+                     "Feel free to contact me via: DiegoFranciscoBueno@Gmail.com\n"\
+                "You can find more about my work at \n http://DiegoFB.Carbonmade.com\n\n\n"\
+                "© 2014 ArenaNet, LLC. All rights reserved. NCSOFT, the interlocking NC logo, ArenaNet,"\
+                "Guild Wars 2, and all associated logos and designs are trademarks or registered trademarks"\
+                "of NCSOFT Corporation. All other trademarks are the property of their respective owners.",
+                            IDC_STATIC,8,24,230,100 //CTEXT position.
+    PUSHBUTTON   "&OK",IDOK,184,4,50,14             // X, Y cords, Sizes in X and Y cords.
+END
