@@ -15,11 +15,19 @@ allows for display of specific items (case sensitive), but requires a minimum of
 organize the display from the most profitable trade to the least.
 
 13) Future Improvement: Make a splash screen that will tell what the program is loading before showing up on the screen. (Then re-work the cmd output for it.)
+            Depending on how much improvement #30 can make, this item might become irrelevant.
 18) Future Improvement: Make the ID/Profit buttons invert the display of items (From "low to high" to "high to low").
 22) Future Improvement: Make the Search Field work with a "enter key" press.
 23) Future Improvement: Make the scroll bar not "flicker" the screen when dragged after using the search button with a small sample, like Tormented/Mordrem/etc...
-29) Future Improvement: Skill Point transformation profits.
-
+29) Future Improvement: Skill Point transformation profits. (Skill points are about to be removed from the game with the introduction of Heart of Thorns expansion).
+29) Future Improvement: Create a "not yet available" icon for itens recently introduced and not yet displayed on the Items API (which also causes "empty" name display).
+30) Future Improvement: Optimize the way requests for Names and Prices are made (This is the highest priority em terms of bottle neck).
+31) Future Improvement: Make items searchable by ID using a paramenter in the search box (if starts with '-' search for the spcified ID).
+32) Future Improvement: Account for ALL buy orders in the whole market and track how much money is invested in the market.
+33) Future Improvement: Something similar to #32, but only regarding a specific Weapon Skin, like Chaos, to see how the overall price behaves through time.
+            (Further considerations, as how often and where the program would back up such information are needed - and might render this useless.)
+34)
+Hot fix: Potent Superior Sharpening Stone has a wrong icon, type "Pot" and look for it"
 **/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if defined(UNICODE) && !defined(_UNICODE)
@@ -677,8 +685,8 @@ void DownloadAndLoadPricesFile(const HWND hwnd)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Make 199 Names Requests
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Uma possibilidade de melhorar a eficiência dessa função seria criar um arquivo para receber todo o output (no lugar da minha string) e, após puxar todos ID's (que é o mais demorado)
-//fazer uma segunda interação cortando todos os ID's.
+// Uma possibilidade de melhorar a eficiÃªncia dessa funÃ§Ã£o seria criar um arquivo para receber todo o output (no lugar da minha string) e, apÃ³s puxar todos ID's (que Ã© o mais demorado)
+//fazer uma segunda interaÃ§Ã£o cortando todos os ID's.
 void Make199NamesRequests(const HWND hwnd, std::ofstream &BLACKLION_FILE, const int itemsDownloaded)
 {
     // Open the link for the item.
@@ -718,11 +726,22 @@ void Make199NamesRequests(const HWND hwnd, std::ofstream &BLACKLION_FILE, const 
     while (dataReceived.find("\"name\"") != 4294967295)     // While there is a "name" in the buffer, keep working.
     {
         // ID first.
-        BLACKLION_FILE << dataReceived.substr((dataReceived.find("\"id\"")), (dataReceived.find("\"icon\"") - dataReceived.find("\"id\""))) << "\t";
+        // Tem alguma coisa errada com o "find("icon")"... a partir do 8700 ele estÃ¡ encontrando um valor muito baixo, 21...
+        // Talvez algo errado com a funÃ§Ã£o de erase?
+        std::cout << "id :" << dataReceived.find("\"id\"") << "  /  " << dataReceived.find("\"icon\"")<< std::endl;
+        //BLACKLION_FILE << dataReceived.substr((dataReceived.find("\"id\"")), (dataReceived.find("\"icon\"") - dataReceived.find("\"id\""))) << "\t";
+        BLACKLION_FILE << dataReceived.substr((dataReceived.find("\"id\"")), 10) << std::endl;
+        BLACKLION_FILE << "id :" << dataReceived.find("\"id\"") << "  /  Icon: " << (dataReceived.find("\"icon")) << std::endl;
+
         // Now the name.
+        /* Esse cara nÃ£o tem nada a ver, o problema estÃ¡ na metade de cima.
+        std::cout << "id :" << dataReceived.substr(dataReceived.find("\"id\""), 10) << "  /  " << dataReceived.find("\"id\"") << std::endl;
+        std::cout << "name :" << dataReceived.substr(dataReceived.find("\"name\"") + 7, 30) << "  /  " << dataReceived.find("\"name\"") << std::endl;
+        std::cout << "type :" << dataReceived.find("\"type\"") << std::endl;
         BLACKLION_FILE << dataReceived.substr((dataReceived.find("\"name\"")), (dataReceived.find("\"type\"") + 1)) << std::endl; // Coppy the ["] character from "type".
+        */
         // Erases the copied item.
-        dataReceived.erase(0, (dataReceived.find("\"type\"")));     // Erases what was coppied.
+        dataReceived.erase(0, (dataReceived.find("\"type\"")));     // Erases what was copied.
         dataReceived.erase(0, dataReceived.find("\"name\""));       // Erases the string until the next item.
     }
     InternetCloseHandle(openUrl);
